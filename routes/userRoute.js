@@ -3,11 +3,6 @@ const userController = require("../controllers/userController");
 
 const auth = require("../middleware/authMiddleware");
 
-router
-  .route("/")
-  .post(userController.registerUser)
-  .get(auth.protect, auth.admin, userController.getUser);
-
 router.route("/login").post(userController.login);
 
 router
@@ -23,5 +18,10 @@ router
   .delete(auth.protect, userController.deleteUser)
   .get(auth.protect, auth.admin, userController.getUserByIdByAdmin)
   .patch(auth.protect, auth.admin, userController.updateUserByAdmin);
+
+router
+  .route("/")
+  .post(userController.registerUser)
+  .get(auth.protect, auth.admin, userController.getUser);
 
 module.exports = router;

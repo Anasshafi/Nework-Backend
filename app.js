@@ -6,6 +6,8 @@ const xss = require("xss-clean");
 const userRouter = require("./routes/userRoute");
 const AppError = require("./utils/appError");
 const cors = require("cors");
+const portfolioRouter = require("./routes/portfolioRouter");
+const jobPostingRouter = require("./routes/jobPostingRouter");
 
 const app = express();
 app.use(cors());
@@ -29,6 +31,8 @@ app.use(mongoSanitize());
 app.use(xss());
 
 app.use("/api/user", userRouter);
+app.use("/api/portfolio", portfolioRouter);
+app.use("/api/job-posting", jobPostingRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

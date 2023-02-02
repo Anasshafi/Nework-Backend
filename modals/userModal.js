@@ -8,6 +8,50 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please tell us your first name"],
     },
+    username: {
+      type: String,
+      default: "",
+    },
+    location: {
+      type: String,
+      default: "",
+    },
+    placeholder: {
+      type: String,
+      default: "",
+    },
+    about: {
+      type: String,
+      default: "",
+    },
+    skills: {
+      type: [String],
+      default: [],
+    },
+    github: {
+      type: String,
+      default: "",
+    },
+    facebook: {
+      type: String,
+      default: "",
+    },
+    twitter: {
+      type: String,
+      default: "",
+    },
+    instagram: {
+      type: String,
+      default: "",
+    },
+    linkedin: {
+      type: String,
+      default: "",
+    },
+    other: {
+      type: String,
+      default: "",
+    },
     lastName: {
       type: String,
       required: [true, "Please tell us your last name"],

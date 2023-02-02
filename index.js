@@ -6,8 +6,8 @@ const db = require("./db");
 
 const port = 3300 || process.env.PORT;
 
-db();
-
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+db().then(() =>
+  app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+  })
+);

@@ -8,7 +8,6 @@ const AppError = require("./../utils/appError");
 
 exports.create = catchAsync(async (req, res, next) => {
   const data = req.body;
-
   const portfolio = await Portfolio.create({
     author: data.author,
     title: data.title,

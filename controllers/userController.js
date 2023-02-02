@@ -73,19 +73,8 @@ exports.registerUser = catchAsync(async (req, res, next) => {
 exports.getUserProfile = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id).select("-password");
   if (!user) return next(new AppError("User not found", 404));
-
-  res.status(200).json({
-    status: "success",
-    _id: user._id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    username: user.username,
-    image: user.image,
-    email: user.email,
-    joined: moment(user.joined).format("YYYY-MM-DD"),
-    address: user.address,
-    isAdmin: user.isAdmin,
-  });
+  user.token = generateToken(user._id);
+  res.status(200).json(user);
 });
 // @desc  Update profile
 // @route PATCH /api/users/profile
@@ -93,21 +82,30 @@ exports.getUserProfile = catchAsync(async (req, res, next) => {
 
 exports.updateUserProfile = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id);
-  const filteredBody = filterObj(
-    req.body,
-    user,
-    "firstName",
-    "lastName",
-    "username",
-    "email",
-    "address",
-    "image",
-    "bookIssued"
+  const data = req.body;
+  const updateUser = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      firstName: data.firstName || user.firstName,
+      lastName: data.lastName || user.lastName,
+      username: data.username || user.username,
+      location: data.location || user.location,
+      placeholder: data.placeholder || user.placeholder,
+      about: data.about || user.about,
+      skills: data.skills || user.skills,
+      github: data.github || user.github,
+      facebook: data.facebook || user.facebook,
+      twitter: data.twitter || user.twitter,
+      instagram: data.instagram || user.instagram,
+      linkedin: data.linkedin || user.linkedin,
+      other: data.other || user.other,
+      email: data.email || user.email,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
   );
-  const updateUser = await User.findByIdAndUpdate(req.user._id, filteredBody, {
-    new: true,
-    runValidators: true,
-  });
   res.status(200).json({
     status: "success",
     data: updateUser,

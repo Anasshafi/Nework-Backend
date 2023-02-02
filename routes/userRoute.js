@@ -17,7 +17,7 @@ router
   .route("/:id")
   .delete(auth.protect, userController.deleteUser)
   .get(auth.protect, auth.admin, userController.getUserByIdByAdmin)
-  .patch(auth.protect, auth.admin, userController.updateUserByAdmin);
+  .patch(auth.protect, userController.updateUserByAdmin);
 
 router
   .route("/")

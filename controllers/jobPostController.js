@@ -49,7 +49,7 @@ exports.update = catchAsync(async (req, res, next) => {
 exports.get = catchAsync(async (req, res, next) => {
   const id = req.params.id;
 
-  const post = await JobPost.findById(id);
+  const post = await JobPost.findById(id).populate("author");
   if (post) {
     res.json(post);
   } else {

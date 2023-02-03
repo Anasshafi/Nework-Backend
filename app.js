@@ -8,6 +8,8 @@ const AppError = require("./utils/appError");
 const cors = require("cors");
 const portfolioRouter = require("./routes/portfolioRouter");
 const jobPostingRouter = require("./routes/jobPostingRouter");
+const mediaRouter = require("./routes/mediaRouter");
+const fileUpload = require("express-fileupload");
 
 const app = express();
 app.use(cors());
@@ -23,6 +25,7 @@ if (process.env.NODE_ENV === "development") {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("static"));
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -30,9 +33,16 @@ app.use(mongoSanitize());
 // Data sanitization against XSS
 app.use(xss());
 
+app.use(
+  fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+  })
+);
+
 app.use("/api/user", userRouter);
 app.use("/api/portfolio", portfolioRouter);
 app.use("/api/job-posting", jobPostingRouter);
+app.use("/api/upload", mediaRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

@@ -23,21 +23,21 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50mb" }));
+app.use(
+  fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 * 1024 },
+  })
+);
+
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.static("static"));
 
-// Data sanitization against NoSQL query injection
+// Data sanitization against NoSQL query` injection
 app.use(mongoSanitize());
 
 // Data sanitization against XSS
 app.use(xss());
-
-app.use(
-  fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 },
-  })
-);
 
 app.use("/api/user", userRouter);
 app.use("/api/portfolio", portfolioRouter);
